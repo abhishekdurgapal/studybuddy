@@ -156,14 +156,22 @@ exports.getRecommendedGroups = async (req, res) => {
     const recommended = groups.filter(group => {
 
       // SUBJECT MATCH
+      
       const subjectMatch =
-        user.subjects.includes(group.subject);
-
+  user.subjects.some(
+    subject =>
+      subject.toLowerCase() ===
+      group.subject.toLowerCase()
+  );
       // AVAILABILITY MATCH
-      const availabilityMatch =
-        group.availability?.some(slot =>
-          user.availability.includes(slot)
-        );
+     const availabilityMatch =
+  group.availability?.some(slot =>
+    user.availability.some(
+      a =>
+        a.toLowerCase() ===
+        slot.toLowerCase()
+    )
+  );
 
       // SKILL MATCH
       let levelMatch = false;
