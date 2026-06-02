@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h2>Dashboard</h2>
+
+<h3 id="welcome"></h3>
+
+<p id="subjects"></p>
+<p id="skill"></p>
+<p id="availability"></p>
+
+<hr>
+
+<h3>Statistics</h3>
+
+<p id="groupsJoined">Groups Joined: 0</p>
+
+<hr>
+<h3>My Groups</h3>
+<div id="myGroups"></div>
+<hr>
+
+<button onclick="window.location='match.html'">
+  Recommended Groups
+</button>
+ <hr>
+<button onclick="window.location='groups.html'">
+  All Groups
+</button>
+<hr>  
+<button onclick="logout()">
+  Logout
+</button>
+
+</div>
+
+<script>
+document.getElementById("welcome").innerText =
+  "Welcome " + localStorage.getItem("name");
+
+document.getElementById("subjects").innerText =
+  "Subjects: " +
+  JSON.parse(localStorage.getItem("subjects"));
+
+document.getElementById("skill").innerText =
+  "Skill Level: " +
+  localStorage.getItem("skillLevel");
+
+document.getElementById("availability").innerText =
+  "Availability: " +
+  JSON.parse(localStorage.getItem("availability"));
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>

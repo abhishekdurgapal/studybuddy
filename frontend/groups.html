@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Study Groups</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h2>Create Study Group</h2>
+
+  <input id="gname" placeholder="Group Name">
+
+  <input id="subject" placeholder="Subject">
+
+  <select id="level">
+    <option value="beginner">Beginner</option>
+    <option value="intermediate">Intermediate</option>
+    <option value="advanced">Advanced</option>
+  </select>
+
+  <input
+    id="availability"
+    placeholder="Availability (morning,evening)"
+  >
+
+  <input
+    id="maxMembers"
+    type="number"
+    placeholder="Max Members"
+    value="10"
+  >
+
+  <button onclick="createGroup()">
+    Create Group
+  </button>
+
+  <hr>
+
+  <h2>Available Groups</h2>
+
+  <div id="groupList"></div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

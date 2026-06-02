@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Group Chat</h2>
+
+<div id="chat" class="chat-box"></div>
+
+<input id="msg" placeholder="Type message">
+<button id="sendBtn">Send</button>
+
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+
+<script>
+const API = "http://localhost:5000";
+const socket = io("http://localhost:5000");
+
+const groupId = localStorage.getItem("groupId");
+const senderName = localStorage.getItem("name") || "User";
+
+// JOIN ROOM
+socket.on("connect", () => {
+  console.log("Connected:", socket.id);
+  socket.emit("joinRoom", groupId);
+});
+
+// LOAD OLD MESSAGES
+async function loadMessages() {
+  const res = await fetch(`${API}/api/messages/${groupId}`);
+  const data = await res.json();
+
+  const chat = document.getElementById("chat");
+  chat.innerHTML = "";
+
+  data.forEach(msg => {
+    chat.innerHTML += `
+      <div class="message">
+        <b>${msg.senderName || "Unknown"}:</b> ${msg.message}
+      </div>
+    `;
+  });
+}
+
+// SEND MESSAGE
+document.getElementById("sendBtn").addEventListener("click", () => {
+
+  console.log("Button clicked");
+
+  const input = document.getElementById("msg");
+  const message = input.value.trim();
+
+  console.log("Message:", message);
+
+  if (!message) return;
+
+  console.log("Emitting socket event");
+
+  socket.emit("sendMessage", {
+    groupId,
+    message,
+    senderName
+  });
+
+  input.value = "";
+});
+
+// RECEIVE MESSAGE
+socket.on("receiveMessage", (data) => {
+  const chat = document.getElementById("chat");
+
+  chat.innerHTML += `
+    <div class="message">
+      <b>${data.senderName}:</b> ${data.message}
+    </div>
+  `;
+});
+
+// LOAD ON START
+loadMessages();
+</script>
+
+</body>
+</html>
