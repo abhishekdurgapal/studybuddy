@@ -13,26 +13,35 @@ const initSocket = (server) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
-    // join group room
-    socket.on("joinGroup", (groupId) => {
+    // JOIN ROOM
+    socket.on("joinRoom", (groupId) => {
       socket.join(groupId);
-      console.log("Joined group:", groupId);
+      console.log("Joined room:", groupId);
     });
 
-    // send message
+    // SEND MESSAGE
     socket.on("sendMessage", async (data) => {
       try {
-        const { groupId, senderId, text } = data;
 
-        // save message in DB
-        const message = await Message.create({
+        const {
           groupId,
-          sender: senderId,
-          text
-        });
+          senderName,
+          message
+        } = data;
 
-        // emit to group
-        io.to(groupId).emit("receiveMessage", message);
+        // SAVE TO DATABASE
+        const savedMessage =
+          await Message.create({
+            groupId,
+            senderName,
+            message
+          });
+
+        // SEND TO ROOM
+        io.to(groupId).emit(
+          "receiveMessage",
+          savedMessage
+        );
 
       } catch (error) {
         console.error(error);
